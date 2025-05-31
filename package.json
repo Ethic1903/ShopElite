@@ -12,7 +12,7 @@
     "docker:build": "docker build -t kursovaya-front .",
     "docker:run": "docker run -p 80:80 kursovaya-front",
     "docker:compose": "docker-compose up -d",
-    "predeploy": "npm run build",
+    "predeploy": "GITHUB_PAGES=true npm run build",
     "deploy": "gh-pages -d dist"
   },
   "keywords": [

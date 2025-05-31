@@ -1,5 +1,15 @@
 import axios from 'axios';
 
+// Определяем базовый URL в зависимости от окружения
+const getBaseURL = () => {
+  if (process.env.NODE_ENV === 'production') {
+    return 'https://your-api-domain.com/api'; // Замените на ваш API
+  }
+  return 'http://localhost:3001/api';
+};
+
+export const API_BASE_URL = getBaseURL();
+
 // Оригинальная версия api с запросами к fakestoreapi.com
 export const api = {
   async getProducts() {
