@@ -3,16 +3,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
-  const isGitHubPages = process.env.GITHUB_PAGES === 'true';
-
+  
   return {
     entry: './src/index.tsx',
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'bundle.js',
       clean: true,
-      // Исправляем пути для GitHub Pages
-      publicPath: isGitHubPages ? '/ShopElite/' : '/',
+      // Устанавливаем правильный publicPath для GitHub Pages
+      publicPath: isProduction ? '/ShopElite/' : '/',
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],

@@ -8,11 +8,7 @@
   "scripts": {
     "start": "webpack serve --mode development --open",
     "build": "webpack --mode production",
-    "test": "jest --coverage",
-    "docker:build": "docker build -t kursovaya-front .",
-    "docker:run": "docker run -p 80:80 kursovaya-front",
-    "docker:compose": "docker-compose up -d",
-    "predeploy": "GITHUB_PAGES=true npm run build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "keywords": [
