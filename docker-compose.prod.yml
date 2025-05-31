@@ -4,7 +4,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.simple
+      dockerfile: Dockerfile.working
     ports:
       - "80:80"
       - "3000:80"
