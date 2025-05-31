@@ -2,6 +2,7 @@
   "$schema": "",
   "name": "react-ecommerce",
   "version": "1.0.0",
+  "homepage": "https://ethic1903.github.io/ShopElite",
   "description": "E-commerce store front-end",
   "main": "index.js",
   "scripts": {
