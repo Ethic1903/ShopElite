@@ -19,7 +19,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Установим OpenSSL для генерации сертификата
-RUN apk add --no-cache openssl
+RUN apk add --no-cache openssl curl
 
 # Создаем самоподписанный сертификат
 RUN mkdir -p /etc/ssl/private && \
@@ -31,7 +31,7 @@ RUN mkdir -p /etc/ssl/private && \
 # Копируем собранное приложение из папки dist
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Копируем SSL конфигурацию nginx
+# Копируем исправленную конфигурацию nginx
 COPY nginx-ssl.conf /etc/nginx/conf.d/default.conf
 
 # Открываем порты 80 и 443
