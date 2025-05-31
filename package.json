@@ -7,7 +7,10 @@
   "scripts": {
     "start": "webpack serve --mode development --open",
     "build": "webpack --mode production",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "docker:build": "docker build -t kursovaya-front .",
+    "docker:run": "docker run -p 80:80 kursovaya-front",
+    "docker:compose": "docker-compose up -d"
   },
   "keywords": [
     "react",
