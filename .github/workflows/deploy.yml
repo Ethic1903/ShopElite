@@ -1,0 +1,40 @@
+name: Deploy to Cloud.ru
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        port: 22
+        script: |
+          # Переходим в рабочую директорию
+          cd /home/${{ secrets.SERVER_USER }}/kursovaya-front || mkdir -p /home/${{ secrets.SERVER_USER }}/kursovaya-front && cd /home/${{ secrets.SERVER_USER }}/kursovaya-front
+          
+          # Клонируем или обновляем репозиторий
+          if [ -d ".git" ]; then
+            git pull origin main
+          else
+            git clone https://github.com/${{ github.repository }} .
+          fi
+          
+          # Останавливаем старые контейнеры
+          docker-compose down || true
+          
+          # Пересобираем и запускаем
+          docker-compose up -d --build
+          
+          # Удаляем неиспользуемые образы
+          docker image prune -f
