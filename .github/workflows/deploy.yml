@@ -1,40 +1,34 @@
-name: Deploy to Cloud.ru
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout code
+    - name: Checkout
       uses: actions/checkout@v4
-    
-    - name: Deploy to server
-      uses: appleboy/ssh-action@v1.0.0
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        port: 22
-        script: |
-          # Переходим в рабочую директорию
-          cd /home/${{ secrets.SERVER_USER }}/kursovaya-front || mkdir -p /home/${{ secrets.SERVER_USER }}/kursovaya-front && cd /home/${{ secrets.SERVER_USER }}/kursovaya-front
-          
-          # Клонируем или обновляем репозиторий
-          if [ -d ".git" ]; then
-            git pull origin main
-          else
-            git clone https://github.com/${{ github.repository }} .
-          fi
-          
-          # Останавливаем старые контейнеры
-          docker-compose down || true
-          
-          # Пересобираем и запускаем
-          docker-compose up -d --build
-          
-          # Удаляем неиспользуемые образы
-          docker image prune -f
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build
+      run: npm run build
+      
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
